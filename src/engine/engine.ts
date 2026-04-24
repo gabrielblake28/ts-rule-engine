@@ -35,12 +35,13 @@ export class RuleEngine<TFacts> {
     }
 
     const result: Decision = failed.length > 0 ? {
-      kind: "pass",
-      passed
-    } : {
       kind: "fail",
       passed,
       failed
+
+    } : {
+      kind: "pass",
+      passed,
     }
 
     return result;

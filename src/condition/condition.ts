@@ -1,4 +1,32 @@
 
+enum NodeKind {
+  LEAF = "leaf",
+  AND = "and",
+  OR = "or"
+}
+
+interface LeafTrace {
+  kind: NodeKind.LEAF,
+  label: string,
+  result: boolean,
+}
+
+interface AndTrace {
+  kind: NodeKind.AND,
+  label: string,
+  result: boolean,
+  children: Trace[]
+}
+
+interface OrTrace {
+  kind: NodeKind.OR,
+  label: string,
+  result: boolean,
+  children: Trace[]
+}
+
+export type Trace = LeafTrace | AndTrace | OrTrace;
+
 
 export abstract class Condition<TFacts> {
   abstract evaluate(facts: TFacts): boolean;

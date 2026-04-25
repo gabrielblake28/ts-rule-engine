@@ -1,27 +1,28 @@
+import { Trace } from "../condition/condition";
 import { Rule } from "../rule/rule";
+import { Decision, Kind } from "./engine.types";
 
-
-interface Pass {
-  kind: "pass",
-  passed: string[],
-  // trace: Trace[]
+type Options = {
+  trace: boolean
 }
-
-interface Fail {
-  kind: "fail",
-  passed: string[],
-  failed: string[],
-  // trace: Trace[],
-}
-
-
-export type Decision = Pass | Fail
-
 
 export class RuleEngine<TFacts> {
 
-  evaluate(facts: TFacts, rules: Rule<TFacts>[]): Decision {
+  evaluate(facts: TFacts, rules: Rule<TFacts>[], opts?: Options): Decision {
 
+    let result: Decision;
+
+    if (opts?.trace) {
+      result = this.evaluateWithTrace(facts, rules)
+    } else {
+      result = this.evaluateWithoutTrace(facts, rules)
+
+    }
+
+    return result;
+  }
+
+  private evaluateWithoutTrace(facts: TFacts, rules: Rule<TFacts>[]): Decision {
     const passed: string[] = [];
     const failed: string[] = [];
 
@@ -35,17 +36,48 @@ export class RuleEngine<TFacts> {
     }
 
     const result: Decision = failed.length > 0 ? {
-      kind: "fail",
+      result: Kind.FAIL,
       passed,
       failed
-
     } : {
-      kind: "pass",
+      result: Kind.PASS,
       passed,
     }
 
     return result;
   }
 
+  private evaluateWithTrace(facts: TFacts, rules: Rule<TFacts>[]): Decision {
+    const passed: string[] = [];
+    const failed: string[] = [];
+    const traces: Trace[] = [];
+
+    for (const rule of rules) {
+
+      const result = rule.condition.explain(facts)
+      traces.push(result);
+
+      if (!result.result) {
+        failed.push(rule.name)
+        continue;
+      }
+
+      passed.push(rule.name)
+    }
+
+    const result: Decision = failed.length > 0 ? {
+      result: Kind.FAIL,
+      passed,
+      failed,
+      trace: traces
+    } : {
+      result: Kind.PASS,
+      passed,
+      trace: traces
+    }
+
+    return result;
+  }
 }
+
 

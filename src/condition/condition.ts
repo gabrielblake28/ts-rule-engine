@@ -42,15 +42,15 @@ export abstract class Condition<TFacts> {
 
   constructor(public label?: string) { };
 
-  // and(other: Condition<TFacts>) { return new AndCondition(this.label, [this, other]); }
-  // or(other: Condition<TFacts>) { return new OrCondition(this.label, [this, other]); }
-  // not() { return new NotCondition(this); }
+  // and(other: Condition<TFacts>) { return new AndCondition([this, other], this.label ?? undefined) }
+  // or(other: Condition<TFacts>) { return new OrCondition([this, other], this.label ?? undefined) }
+  // not() { return new NotCondition(this) }
 }
 
 
 export class PredicateCondition<TFacts> extends Condition<TFacts> {
 
-  constructor(public label: string, private fn: (facts: TFacts) => boolean) {
+  constructor(private fn: (facts: TFacts) => boolean, public label?: string) {
     super(label)
   }
 

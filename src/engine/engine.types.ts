@@ -9,6 +9,7 @@ export enum Kind {
 interface PassWithTrace {
   result: Kind.PASS,
   passed: string[],
+  failed?: string[],
   trace: Trace[],
 }
 
@@ -41,7 +42,7 @@ const strategy = ["all", "allPass", "anyPass"] as const;
 export type Strategy = typeof strategy[number];
 
 export type Options = {
-  trace: boolean
-  strategy: Strategy
+  trace?: boolean
+  strategy?: Strategy
 }
 

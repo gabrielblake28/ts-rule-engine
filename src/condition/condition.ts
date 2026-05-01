@@ -30,7 +30,7 @@ interface NotTrace {
   kind: NodeKind.NOT,
   label: string | undefined,
   result: boolean,
-  children: Trace
+  child: Trace
 }
 
 export type Trace = LeafTrace | AndTrace | OrTrace | NotTrace;
@@ -140,8 +140,7 @@ export class NotCondition<TFacts> extends Condition<TFacts> {
       kind: NodeKind.NOT,
       label: this.label,
       result: !childTrace.result,
-      children: childTrace,
+      child: childTrace,
     };
   }
 }
-

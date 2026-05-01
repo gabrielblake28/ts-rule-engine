@@ -9,11 +9,11 @@ const TestFact = {
   value: 99
 }
 
-const trueCondition = new PredicateCondition((facts: Fact) => facts.name === "TestFact");
-const falseCondition = new PredicateCondition((facts: Fact) => facts.value > 100);
+const trueCondition = new PredicateCondition((facts: Fact) => facts.name === "TestFact", "true condition");
+const falseCondition = new PredicateCondition((facts: Fact) => facts.value > 100, "false condition");
 
-const trueConditionTwo = new PredicateCondition((facts: Fact) => facts.direction === Direction.Down);
-const falseConditionTwo = new PredicateCondition((facts: Fact) => facts.memberType === MemberType.Free);
+const trueConditionTwo = new PredicateCondition((facts: Fact) => facts.direction === Direction.Down, "true condition 2");
+const falseConditionTwo = new PredicateCondition((facts: Fact) => facts.memberType === MemberType.Free, "false condition 2");
 
 const trueAndCondition = new AndCondition([trueCondition, trueConditionTwo]);
 const falseAndWithBothFalseConditions = new AndCondition([falseCondition, falseConditionTwo]);
